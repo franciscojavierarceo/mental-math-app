@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Quiz</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group input {
+            padding: 10px;
+            font-size: 18px;
+            width: 100px;
+            text-align: center;
+        }
+        .input-group button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .audio-mode {
+            margin-top: 20px;
+        }
+        .audio-mode button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Multiplication Quiz</h1>
+        <div class="question" id="question">What is x times y?</div>
+        <div class="input-group">
+            <input type="number" id="answer" placeholder="Your answer">
+            <button onclick="submitAnswer()">Submit</button>
+        </div>
+        <div class="result" id="result"></div>
+        <div class="audio-mode">
+            <button onclick="playQuestion()">Play Question</button>
+            <button onclick="displayQuestion()">Display Question</button>
+        </div>
+    </div>
+
+    <script>
+        let num1, num2;
+
+        function generateQuestion() {
+            fetch('/generate-question/')
+                .then(response => response.json())
+                .then(data => {
+                    num1 = data.num1;
+                    num2 = data.num2;
+                    document.getElementById('question').innerText = `What is ${num1} times ${num2}?`;
+                });
+        }
+
+        function submitAnswer() {
+            const userAnswer = document.getElementById('answer').value;
+            fetch('/quiz/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    num1: num1,
+                    num2: num2,
+                    user_answer: userAnswer
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const result = data.is_correct ? 'Correct!' : `Incorrect. The correct answer is ${data.correct_answer}.`;
+                document.getElementById('result').innerText = result;
+            });
+        }
+
+        function playQuestion() {
+            const utterance = new SpeechSynthesisUtterance(`What is ${num1} times ${num2}?`);
+            speechSynthesis.speak(utterance);
+        }
+
+        function displayQuestion() {
+            document.getElementById('question').innerText = `What is ${num1} times ${num2}?`;
+        }
+
+        window.onload = generateQuestion;
+    </script>
+</body>
+</html>
