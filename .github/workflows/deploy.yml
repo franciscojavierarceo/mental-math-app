@@ -31,9 +31,9 @@ jobs:
       run: |
         python manage.py collectstatic --noinput
 
-    - name: Deploy to Render
+    - name: Deploy to Netlify
       run: |
-        render deploy
+        deploy_netlify staticfiles
       env:
-        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
