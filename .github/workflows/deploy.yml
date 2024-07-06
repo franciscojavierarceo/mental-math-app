@@ -29,12 +29,3 @@ jobs:
     - name: Collect static files
       run: |
         python manage.py collectstatic --noinput
-
-    - name: Deploy to Netlify
-      uses: nwtgck/actions-netlify@v1.2.3
-      with:
-        publish-dir: ./staticfiles
-        production-deploy: true
-      env:
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
