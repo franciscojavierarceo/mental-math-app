@@ -17,10 +17,12 @@ def generate_question(max_digits=2):
     num2 = weighted_random()
     return num1, num2
 
-@login_required
 def quiz_view(request):
     if request.method == 'GET':
-        return render(request, 'quiz.html')
+        context = {
+            'is_authenticated': request.user.is_authenticated
+        }
+        return render(request, 'quiz.html', context)
     elif request.method == 'POST':
         try:
             num1 = int(request.POST.get('num1'))
@@ -32,22 +34,23 @@ def quiz_view(request):
         correct_answer = num1 * num2
         is_correct = (user_answer == correct_answer)
 
-        # Retrieve or create a QuizAttempt instance for the user
-        quiz_attempt, created = QuizAttempt.objects.get_or_create(user=request.user)
+        if request.user.is_authenticated:
+            # Retrieve or create a QuizAttempt instance for the user
+            quiz_attempt, created = QuizAttempt.objects.get_or_create(user=request.user)
 
-        # Update counters
-        quiz_attempt.games_played += 1
-        if is_correct:
-            quiz_attempt.correct_submissions += 1
-        else:
-            quiz_attempt.incorrect_submissions += 1
+            # Update counters
+            quiz_attempt.games_played += 1
+            if is_correct:
+                quiz_attempt.correct_submissions += 1
+            else:
+                quiz_attempt.incorrect_submissions += 1
 
-        # Calculate accuracy
-        if quiz_attempt.games_played > 0:
-            quiz_attempt.accuracy = (quiz_attempt.correct_submissions / quiz_attempt.games_played) * 100
+            # Calculate accuracy
+            if quiz_attempt.games_played > 0:
+                quiz_attempt.accuracy = (quiz_attempt.correct_submissions / quiz_attempt.games_played) * 100
 
-        # Save the updated QuizAttempt instance
-        quiz_attempt.save()
+            # Save the updated QuizAttempt instance
+            quiz_attempt.save()
 
         return JsonResponse({'is_correct': is_correct, 'correct_answer': correct_answer})
     return render(request, 'quiz.html')

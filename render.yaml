@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: mental-math-app
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn quiz_project.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        value: "your_database_url_here"
+      - key: DJANGO_SECRET_KEY
+        value: "your_secure_secret_key_here"
+      - key: GOOGLE_CLIENT_ID
+        value: "your_google_client_id_here"
+      - key: GOOGLE_SECRET
+        value: "your_google_secret_here"
+# Triggering a new deployment by adding this comment
