@@ -26,8 +26,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-e8=$ub@cq9ek-(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['multiplication-quiz-app-nl3rbgjj.devinapps.com', 'multiplication-quiz-app-zkg0jmzt.devinapps.com']
-CSRF_TRUSTED_ORIGINS = ['https://multiplication-quiz-app-nl3rbgjj.devinapps.com']
+ALLOWED_HOSTS = ['multiplication-quiz-app-nl3rbgjj.devinapps.com', 'multiplication-quiz-app-zkg0jmzt.devinapps.com', 'mental-math-app.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://multiplication-quiz-app-nl3rbgjj.devinapps.com', 'https://mental-math-app.onrender.com']
 
 
 # Application definition
@@ -176,6 +176,7 @@ LOGGING = {
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     'https://multiplication-quiz-app.netlify.app',
+    'https://mental-math-app.onrender.com',
 ]
 
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', 'dummy_client_id')
