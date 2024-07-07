@@ -163,11 +163,16 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': BASE_DIR / 'error.log',
         },
+        'info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'info.log',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'ERROR',
+            'handlers': ['file', 'info'],
+            'level': 'INFO',
             'propagate': True,
         },
     },
